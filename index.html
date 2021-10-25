@@ -1,19 +1,65 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <link href="./styles.css" rel="stylesheet">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+    <title>Circular Genome View</title>
+    <!-- The commented scripts below are the minified production versions of the
+      other scripts -->
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin="anonymous"></script>
+    <!--    <script src="https://unpkg.com/@jbrowse/react-circular-genome-view/dist/react-circular-genome-view.umd.development.js"
+                crossorigin="anonymous"></script>-->
+    <script
+            src="https://unpkg.com/@jbrowse/react-circular-genome-view/dist/react-circular-genome-view.umd.production.min.js"
+            crossorigin="anonymous"
+    ></script>
 
-    <!-- You can also require other files to run in this process -->
-    <script src="./renderer.js"></script>
-  </body>
+    <!--    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+        <script src="https://unpkg.com/@jbrowse/react-circular-genome-view/dist/react-circular-genome-view.umd.production.min.js"
+                crossorigin></script>-->
+
+</head>
+<body>
+
+<div id="jbrowse_circular_genome_view"></div>
+
+<script type="module">
+
+    import CircularView from "./js/circularView.js";
+
+
+    const el = document.getElementById('jbrowse_circular_genome_view');
+    const config = {
+        chromosomes: [{"name": "1", "bpLength": 248956422},
+            {"name": "2", "bpLength": 242193529},
+            {"name": "3", "bpLength": 198295559},
+            {"name": "4", "bpLength": 190214555},
+            {"name": "5", "bpLength": 181538259},
+            {"name": "6", "bpLength": 170805979},
+            {"name": "7", "bpLength": 159345973},
+            {"name": "8", "bpLength": 145138636},
+            {"name": "9", "bpLength": 138394717},
+            {"name": "10", "bpLength": 133797422},
+            {"name": "11", "bpLength": 135086622},
+            {"name": "12", "bpLength": 133275309},
+            {"name": "13", "bpLength": 114364328},
+            {"name": "14", "bpLength": 107043718},
+            {"name": "15", "bpLength": 101991189},
+            {"name": "16", "bpLength": 90338345},
+            {"name": "17", "bpLength": 83257441},
+            {"name": "18", "bpLength": 80373285},
+            {"name": "19", "bpLength": 58617616},
+            {"name": "20", "bpLength": 64444167},
+            {"name": "21", "bpLength": 46709983},
+            {"name": "22", "bpLength": 50818468},
+            {"name": "X", "bpLength": 156040895},
+            {"name": "Y", "bpLength": 57227415}]
+    }
+
+    const circularView = new CircularView(el, config);
+
+</script>
+
+</body>
 </html>
