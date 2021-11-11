@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Circular Genome View</title>
+    <title>JBrowse Circular Genome View</title>
     <!-- The commented scripts below are the minified production versions of the
       other scripts -->
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin="anonymous"></script>
@@ -22,42 +22,99 @@
 </head>
 <body>
 
+<div id="dialogs"></div>
 <div id="jbrowse_circular_genome_view"></div>
 
 <script type="module">
 
-    import CircularView from "./js/circularView.js";
-
+    import CircularView from "./node_modules/circular-view/js/circularView.js";
 
     const el = document.getElementById('jbrowse_circular_genome_view');
     const config = {
-        chromosomes: [{"name": "1", "bpLength": 248956422},
-            {"name": "2", "bpLength": 242193529},
-            {"name": "3", "bpLength": 198295559},
-            {"name": "4", "bpLength": 190214555},
-            {"name": "5", "bpLength": 181538259},
-            {"name": "6", "bpLength": 170805979},
-            {"name": "7", "bpLength": 159345973},
-            {"name": "8", "bpLength": 145138636},
-            {"name": "9", "bpLength": 138394717},
-            {"name": "10", "bpLength": 133797422},
-            {"name": "11", "bpLength": 135086622},
-            {"name": "12", "bpLength": 133275309},
-            {"name": "13", "bpLength": 114364328},
-            {"name": "14", "bpLength": 107043718},
-            {"name": "15", "bpLength": 101991189},
-            {"name": "16", "bpLength": 90338345},
-            {"name": "17", "bpLength": 83257441},
-            {"name": "18", "bpLength": 80373285},
-            {"name": "19", "bpLength": 58617616},
-            {"name": "20", "bpLength": 64444167},
-            {"name": "21", "bpLength": 46709983},
-            {"name": "22", "bpLength": 50818468},
-            {"name": "X", "bpLength": 156040895},
-            {"name": "Y", "bpLength": 57227415}]
+        assembly: {
+            id: "hg38",
+            name: "hg38",
+            chromosomes: [
+                {"name": "1", "bpLength": 248956422},
+                {"name": "2", "bpLength": 242193529},
+                {"name": "3", "bpLength": 198295559},
+                {"name": "4", "bpLength": 190214555},
+                {"name": "5", "bpLength": 181538259},
+                {"name": "6", "bpLength": 170805979},
+                {"name": "7", "bpLength": 159345973},
+                {"name": "8", "bpLength": 145138636},
+                {"name": "9", "bpLength": 138394717},
+                {"name": "10", "bpLength": 133797422},
+                {"name": "11", "bpLength": 135086622},
+                {"name": "12", "bpLength": 133275309},
+                {"name": "13", "bpLength": 114364328},
+                {"name": "14", "bpLength": 107043718},
+                {"name": "15", "bpLength": 101991189},
+                {"name": "16", "bpLength": 90338345},
+                {"name": "17", "bpLength": 83257441},
+                {"name": "18", "bpLength": 80373285},
+                {"name": "19", "bpLength": 58617616},
+                {"name": "20", "bpLength": 64444167},
+                {"name": "21", "bpLength": 46709983},
+                {"name": "22", "bpLength": 50818468},
+                {"name": "X", "bpLength": 156040895},
+                {"name": "Y", "bpLength": 57227415}]
+        },
+
+        onChordClick: (feature) => {
+
+            const f1 = feature.data;
+            const f2 = f1.mate;
+            const flanking = 2000;
+
+            const s1 = Math.max(0, f1.start - flanking);
+            const e1 = f1.end + flanking;
+            const s2 = Math.max(0, f2.start - flanking);
+            const e2 = f2.end + flanking;
+
+            const searchString = `goto ${f1.refName}:${s1}-${e1} ${f2.refName}:${s2}-${e2}\r\n`
+
+            window.api.send("toIGV", searchString)
+        }
     }
 
     const circularView = new CircularView(el, config);
+
+    window.addEventListener('resize', () => {
+        const sz = Math.min(window.innerWidth, window.innerHeight);
+        circularView.setSize(sz);
+    })
+
+    window.api.receive("fromMain", (data) => {
+        try {
+
+            const message = JSON.parse(data);
+
+            switch (message.message) {
+                case 'addChords':
+                    const chords = message.data;
+                    circularView.addChords(chords);
+                    break;
+
+                case 'clearChords':
+                    circularView.clearChords();
+                    break;
+
+                case 'setSize':
+                    const newSize = Number.parseInt(message.data);
+                    break;
+
+
+                default:
+                    console.log(`Unknown message ${message.message}`)
+            }
+
+        } catch (e) {
+            console.log(e);
+        }
+
+    });
+
 
 </script>
 

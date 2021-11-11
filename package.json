@@ -1,22 +1,50 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "name": "circ",
+  "version": "0.1.0",
+  "description": "Electron wrapper of jBrowse circular view",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "postinstall": "electron-builder install-app-deps",
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --macos --linux --windows"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/igvteam/circ-app",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "genomics"
   ],
   "author": "GitHub",
-  "license": "CC0-1.0",
+  "license": "MIT",
+  "dependencies": {
+    "circular-view": "github:igvteam/circular-view",
+    "electron-prompt": "^1.7.0",
+    "electron-util": "^0.17.2",
+    "new-github-issue-url": "^0.2.1"
+  },
   "devDependencies": {
-    "electron": "^15.2.0"
+    "electron": "^15.2.0",
+    "electron-builder": "^22.13.1",
+    "install": "^0.13.0"
+  },
+  "build": {
+    "appId": "igv.org.circ",
+    "mac": {
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "iconSize": 160,
+      "contents": [
+        {
+          "x": 180,
+          "y": 170
+        },
+        {
+          "x": 480,
+          "y": 170,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
   }
 }
