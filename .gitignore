@@ -1,1 +1,5 @@
 node_modules
+/circ-app.iml
+/build/
+/dist/
+/node_modules/
