@@ -22,3 +22,14 @@ npm install
 npm start
 ```
 
+## To build
+
+To build first clone and npm install as described above.  Then run
+
+```bash
+npm run dist
+```
+Build artifacts will be deposited in a "dist" folder.   The build itself is configured in ```package.json```.  See
+the [electron-builder](https://www.electron.build/) documentation for configuration options.
+
+

@@ -90,7 +90,7 @@ server.on('connection', (socket) => {
                     const message = String.fromCharCode.apply(null, buffer);
                     const json = JSON.parse(message);
                     if ('ping' === json.message) {
-
+                        // No message to send
                     } else {
                         mainWindow.webContents.send('fromMain', message);
                     }

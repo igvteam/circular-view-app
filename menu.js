@@ -68,7 +68,7 @@ if (!is.macos) {
             type: 'separator'
         },
         aboutMenuItem({
-            icon: path.join(__dirname, 'static', 'IGV_64.ico'),
+            icon: path.join(__dirname, 'static', 'icon.ico'),
             text: 'Created by Your Name'
         })
     );

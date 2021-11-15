@@ -1,6 +1,7 @@
 node_modules
 /circ-app.iml
-/build/
+/resources/
 /dist/
 /node_modules/
 /.idea/
+/package-lock.json
