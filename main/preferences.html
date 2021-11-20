@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Preferences</h1>
+
+<div>
+    <p>
+        <label for="portInput">Port:</label>
+        <input id="portInput" type="text"/>
+    </p>
+    <p>
+        <label for="igvHostInput">IGV Port:</label>
+        <input id="igvHostInput" type="text"/>
+    </p>
+    <p>
+        <label for="igvPortInput">IGV Port:</label>
+        <input id="igvPortInput" type="text"/>
+    </p>
+</div>
+
+<div>
+    <button id="cancel">Cancel</button>
+    <button id="save">Save</button>
+</div>
+
+<script type="module">
+
+    const query = window.location.search;
+    const urlParams = new URLSearchParams(query);
+    const port = urlParams.get("port") || "1234";
+    const igvHost = urlParams.get("igvhost") || "localhost";
+    const igvPort = urlParams.get("igvPort") || "60151";
+
+    document.getElementById("portInput").value = port;
+    document.getElementById("igvHostInput").value = igvHost;
+    document.getElementById("igvPortInput").value = igvPort;
+
+    document.getElementById("cancel").addEventListener('click', () => {
+        try {
+            const preferences = {
+                port: parseInt(document.getElementById("portInput").value),
+                igvHost: document.getElementById("igvHostInput").value,
+                igvPort: document.getElementById("igvPortInput").value
+            }
+            window.api.send("preferences", `{"cancel": true}`);
+        } catch (e) {
+            window.api.send("preferences", `{"error": "${e.message}"`)
+        }
+    })
+
+    document.getElementById("save").addEventListener('click', () => {
+        try {
+            const preferences = {
+                port: parseInt(document.getElementById("portInput").value),
+                igvHost: document.getElementById("igvHostInput").value,
+                igvPort: document.getElementById("igvPortInput").value
+            }
+            window.api.send("preferences", JSON.stringify(preferences));
+        } catch (e) {
+            window.api.send("preferences", `{"error": "${e.message}"`)
+        }
+    })
+</script>
+</body>
+</html>

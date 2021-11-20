@@ -10,7 +10,7 @@ contextBridge.exposeInMainWorld(
     "api", {
       send: (channel, data) => {
       	// whitelist channels
-      	let validChannels = ["toIGV"];
+      	let validChannels = ["toIGV", "preferences"];
       	if (validChannels.includes(channel)) {
       		ipcRenderer.send(channel, data);
       	}

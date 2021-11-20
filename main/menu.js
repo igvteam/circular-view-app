@@ -1,7 +1,7 @@
-'use strict';
-const path = require('path');
-const fs = require('fs');
-const {app, Menu, shell, dialog} = require('electron');
+'use strict'
+const path = require('path')
+const fs = require('fs')
+const {app, Menu, shell, dialog} = require('electron')
 const {
     is,
     appMenu,
@@ -9,20 +9,20 @@ const {
     openUrlMenuItem,
     openNewGitHubIssue,
     debugInfo
-} = require('electron-util');
-const prompt = require('electron-prompt');
+} = require('electron-util')
+const createPreferenceWindow = require('./preferences.js')
 
+let globals
 
-let mainWindow;
-
-function createMenu(win) {
-    mainWindow = win;
-    return Menu.buildFromTemplate(template);
+function createMenu(g) {
+    globals = g
+    return Menu.buildFromTemplate(template)
 }
 
 const showPreferences = () => {
     // Show the app's preferences here
-};
+    createPreferenceWindow(globals)
+}
 
 const helpSubmenu = [
     openUrlMenuItem({
@@ -42,25 +42,25 @@ const helpSubmenu = [
 
 ---
 
-${debugInfo()}`;
+${debugInfo()}`
 
             openNewGitHubIssue({
                 user: 'igvteam',
                 repo: 'circular-view',
                 body
-            });
+            })
         }
     }
-];
+]
 
 const viewSubmenu = [
     {
         label: 'Clear chords',
         click() {
-            mainWindow.webContents.send('fromMain', '{"message": "clearChords"}');
+            globals.mainWindow.webContents.send('fromMain', '{"message": "clearChords"}')
         }
     }
-];
+]
 
 if (!is.macos) {
     helpSubmenu.push(
@@ -71,7 +71,7 @@ if (!is.macos) {
             icon: path.join(__dirname, 'static', 'icon.ico'),
             text: 'Created by Your Name'
         })
-    );
+    )
 }
 
 const debugSubmenu = [
@@ -79,7 +79,7 @@ const debugSubmenu = [
         label: 'Open development tools',
         click() {
             // Open the DevTools.
-            mainWindow.webContents.openDevTools()
+            globals.mainWindow.webContents.openDevTools()
         }
     },
     // {
@@ -113,7 +113,7 @@ const debugSubmenu = [
     //         app.quit();
     //     }
     // }
-];
+]
 
 const macosTemplate = [
     appMenu([
@@ -121,7 +121,7 @@ const macosTemplate = [
             label: 'Preferences…',
             accelerator: 'Command+,',
             click() {
-                showPreferences();
+                showPreferences()
             }
         }
     ]),
@@ -151,11 +151,11 @@ const macosTemplate = [
         role: 'help',
         submenu: helpSubmenu
     },
-    {
-        label: 'Debug',
-        submenu: debugSubmenu
-    }
-];
+    // {
+    //     label: 'Debug',
+    //     submenu: debugSubmenu
+    // }
+]
 
 // Linux and Windows
 const otherTemplate = [
@@ -172,7 +172,7 @@ const otherTemplate = [
                 label: 'Settings',
                 accelerator: 'Control+,',
                 click() {
-                    showPreferences();
+                    showPreferences()
                 }
             },
             {
@@ -192,7 +192,7 @@ const otherTemplate = [
         role: 'help',
         submenu: helpSubmenu
     }
-];
+]
 
 /**
  * Open a file dialog to select files.
@@ -201,26 +201,26 @@ const otherTemplate = [
  */
 async function getFileFromUser() {
 
-    const files = await dialog.showOpenDialog(mainWindow, {
+    const files = await dialog.showOpenDialog(globals.mainWindow, {
         properties: ['openFile', 'multiSelections']
-    });
+    })
 
     if (!files) {
-        return;
+        return
     }
 
-    const configs = createTrackConfigs(files.filePaths);
-    mainWindow.webContents.send('fromMain', JSON.stringify(configs))
+    const configs = createTrackConfigs(files.filePaths)
+    globals.mainWindow.webContents.send('fromMain', JSON.stringify(configs))
 
 }
 
-const template = is.macos ? macosTemplate : otherTemplate;
+const template = is.macos ? macosTemplate : otherTemplate
 
 if (is.development) {
     template.push({
         label: 'Debug',
         submenu: debugSubmenu
-    });
+    })
 }
 
 module.exports = createMenu
