@@ -1,13 +1,13 @@
-// Modules to control application life and create native browser window
 const {app, BrowserWindow, ipcMain, Menu} = require('electron')
 const fs = require('fs')
 const path = require('path')
+const net = require('net')
 const createMenu = require('./menu.js')
 const {startServer} = require('./server.js')
-const sendToIGV = require('./toigv.js')
+
 
 const configDefaults = {
-    port: 1234,
+    port: 60152,
     igvHost: "localhost",
     igvPort: 60151
 }
@@ -19,7 +19,6 @@ const globals = {};
     globals.config = Object.assign({}, configDefaults)
     try {
         const overrides = require(path.join(app.getPath('userData'), 'config.json'))
-        console.log(overrides)
         Object.assign(globals.config, overrides)
     } catch (e) {
         // config file does not exist unless preferences has been edited
@@ -35,8 +34,8 @@ async function createMainWindow() {
     const mainWindow = new BrowserWindow({
         title: "IGV",
         show: false,
-        width: 600,
-        height: 600,
+        width: 700,
+        height: 730,
         webPreferences: {
             preload: path.join(__dirname, "preload.js")
         }
@@ -44,6 +43,7 @@ async function createMainWindow() {
 
     mainWindow.on('ready-to-show', () => {
         mainWindow.show()
+        mainWindow.webContents.openDevTools()
     })
 
     mainWindow.on('closed', () => {
@@ -52,6 +52,7 @@ async function createMainWindow() {
 
     const appPath = app.getAppPath()
     await mainWindow.loadFile(path.join(appPath, 'index.html'))
+    mainWindow.webContents.send('fromMain', `{"message": "ready"}`)
 
     if (!globals.server) {
         globals.server = startServer(mainWindow, globals.config.port)
@@ -60,27 +61,48 @@ async function createMainWindow() {
     return mainWindow
 }
 
+function sendToIGV(message, host, igvport) {
+
+    try {
+        const socket = new net.Socket()
+
+        // Send a connection request to the server.
+        socket.connect({port: igvport, host: host}, function () {
+            //console.log('TCP connection established with the server.');
+            socket.write(message)
+            socket.end()
+        })
+
+        socket.on('error', (err) => {
+            console.error(err)
+            globals.mainWindow.webContents.send('fromMain', `{"message": "alert", "data": "${err}"}`)
+        })
+
+        socket.on('end', function () {
+
+        })
+
+    } catch (err) {
+        console.error(err)
+        globals.mainWindow.webContents.send('fromMain', `{"message": "alert", "data": "${err}"}`)
+    }
+}
 
 app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createMainWindow()
+    if (BrowserWindow.getAllWindows().length === 0) globals.mainWindow = createMainWindow()
 })
 
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// Quit when all windows are closed
 app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit()
+    //if (process.platform !== 'darwin')
+    app.quit()
 })
 
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
 
 ipcMain.on('toIGV', (event, msg) => {
-    console.log(msg) // msg from web page
     sendToIGV(msg, globals.config.igvHost, globals.config.igvPort)
 })
 
@@ -90,7 +112,7 @@ ipcMain.on('preferences', (event, msg) => {
     BrowserWindow.getFocusedWindow().hide()
 
     const json = JSON.parse(msg)
-    if(json.hasOwnProperty('port') && json.hasOwnProperty('igvHost') && json.hasOwnProperty('igvPort')) {
+    if (json.hasOwnProperty('port') && json.hasOwnProperty('igvHost') && json.hasOwnProperty('igvPort')) {
         if (json.port && json.port !== globals.config.port) {
             if (globals.server) {
                 globals.server.close()
@@ -99,7 +121,6 @@ ipcMain.on('preferences', (event, msg) => {
         }
         Object.assign(globals.config, json)
         writeConfig(globals.config)
-        console.log(globals.config)
     }
 })
 

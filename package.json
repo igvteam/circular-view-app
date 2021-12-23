@@ -1,8 +1,8 @@
 {
-  "name": "igv-jbrowse-circview",
+  "name": "igv-jbrowse-circularview",
   "version": "0.1.0",
   "description": "Electron wrapper of jBrowse circular view",
-  "main": "main/main.js",
+  "main": "src/main/main.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "electron .",
@@ -13,7 +13,7 @@
   "keywords": [
     "genomics"
   ],
-  "author": "GitHub",
+  "author": "Jim Robinson",
   "license": "MIT",
   "dependencies": {
     "circular-view": "github:igvteam/circular-view",
@@ -27,11 +27,12 @@
   },
   "build": {
     "appId": "igv.org.circview",
-    "productName": "IGV-JBrowse Circular View",
+    "productName": "IGV JBrowse CircularView",
     "directories": {
       "buildResources": "resources"
     },
     "dmg": {
+      "sign": false,
       "iconSize": 160,
       "contents": [
         {
