@@ -16,41 +16,34 @@ function startServer(mainWindow, port, host) {
 
     server.on('connection', (socket) => {
 
+        let buffer = [];
+
         const clientAddress = `${socket.remoteAddress}:${socket.remotePort}`;
         console.log(`new client connected: ${clientAddress}`);
 
-        let buffer = '';
         socket.on('data', (data) => {
-            // only the first 256 element to prevent DOS
-            console.log(`Client ${clientAddress}: buffer.size=${buffer.length} data.size=${data.length} data[0,256]=${data.slice(0,256)}..`);
-
-            let start = 0;
-            let lfPos = data.indexOf(10, start);
-            while (-1!=lfPos) {
-                buffer += data.toString('utf8', start, lfPos);
-                try {
-                    // FIXME: inefficient, parsing twice for non-ping message
-                    const json = JSON.parse(buffer);
-                    if ('ping' === json.message) {
-                        // No message to send
-                    } else {
-                        mainWindow.webContents.send('fromMain', buffer);
+            console.log(`Client ${clientAddress}: ${data}`);
+            for (let b of data) {
+                if (b === 10) {   // Line feed
+                    const message = String.fromCharCode.apply(null, buffer);
+                    try {
+                        const json = JSON.parse(message);
+                        if ('ping' === json.message) {
+                            // No message to send
+                        } else {
+                            //console.log(message);
+                            mainWindow.webContents.send('fromMain', message);
+                        }
+                    } catch (e) {
+                        console.error(e);
+                        console.error("Malformed message: " + message);
                     }
-                    socket.write('OK\r\n');
-                } catch (e) {
-                    console.error(e);
-                    console.error("Malformed message: " + buffer);
+                    buffer = [];
+                } else {
+                    buffer.push(b);
                 }
-                buffer = '';
-
-                start = lfPos + 1;
-                lfPos = data.indexOf(10, start);
             }
-
-            if (start<data.length) {
-                buffer += data.toString('utf8', start, data.length);
-            }
-
+            socket.write('OK\r\n');
         });
 
         socket.on('close', (data) => {
