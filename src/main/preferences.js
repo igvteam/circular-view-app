@@ -17,7 +17,6 @@ async function createPreferencesWindow(globals) {
         }
     })
 
-    console.log(`pref ${globals.config}`)
     await prefWindow.loadFile(path.join(__dirname, 'preferences.html'), {query: globals.config})
 
     prefWindow.once('ready-to-show', () => {
