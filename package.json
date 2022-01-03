@@ -7,7 +7,7 @@
     "postinstall": "electron-builder install-app-deps",
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --macos --linux --windows"
+    "build": "electron-builder --macos --linux --windows"
   },
   "repository": "https://github.com/igvteam/circ-app",
   "keywords": [
