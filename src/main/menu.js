@@ -143,18 +143,18 @@ const macosTemplate = [
     // {
     //     role: 'editMenu'
     // },
-    {
-        role: 'viewMenu',
-        submenu: viewSubmenu
-    },
+    // {
+    //     role: 'viewMenu',
+    //     submenu: viewSubmenu
+    // },
     {
         role: 'help',
         submenu: helpSubmenu
     },
-    // {
-    //     label: 'Debug',
-    //     submenu: debugSubmenu
-    // }
+    {
+        label: 'Debug',
+        submenu: debugSubmenu
+    }
 ]
 
 // Linux and Windows
@@ -183,11 +183,11 @@ const otherTemplate = [
             }
         ]
     },
-    {
-        role: 'viewMenu',
-        submenu: viewSubmenu
-
-    },
+    // {
+    //     role: 'viewMenu',
+    //     submenu: viewSubmenu
+    //
+    // },
     {
         role: 'help',
         submenu: helpSubmenu

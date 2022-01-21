@@ -1,4 +1,4 @@
-import {CircularView} from "../../../circular-view/dist/circular-view.js"
+import {CircularView} from "./circular-view.js"
 
 const el = document.getElementById('jbrowse_circular_genome_view')
 const config = {

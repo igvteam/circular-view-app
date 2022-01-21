@@ -6,3 +6,4 @@ node_modules
 /.idea/
 /package-lock.json
 /upload.sh
+/src/renderer/circular-view.js

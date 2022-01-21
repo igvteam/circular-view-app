@@ -4,7 +4,7 @@
   "description": "Electron wrapper of jBrowse circular view",
   "main": "src/main/main.js",
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
+    "postinstall": "cp node_modules/circular-view/dist/circular-view.js src/renderer/.; electron-builder install-app-deps",
     "start": "electron .",
     "pack": "electron-builder --dir",
     "build": "electron-builder --macos --linux --windows"
@@ -16,13 +16,13 @@
   "author": "Jim Robinson",
   "license": "MIT",
   "dependencies": {
-    "circular-view": "github:igvteam/circular-view",
     "electron-util": "^0.17.2",
     "new-github-issue-url": "^1.0.0"
   },
   "devDependencies": {
     "electron": "^16.0.6",
     "electron-builder": "^22.14.5",
+    "circular-view": "github:igvteam/circular-view",
     "install": "^0.13.0"
   },
   "build": {
