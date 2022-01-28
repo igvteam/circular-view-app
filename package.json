@@ -20,7 +20,7 @@
     "new-github-issue-url": "^1.0.0"
   },
   "devDependencies": {
-    "electron": "^16.0.6",
+    "electron": "^16.0.8",
     "electron-builder": "^22.14.5",
     "circular-view": "github:igvteam/circular-view",
     "install": "^0.13.0"
