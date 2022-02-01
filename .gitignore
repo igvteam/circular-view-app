@@ -1,6 +1,5 @@
 node_modules
 /circ-app.iml
-/resources/
 /dist/
 /node_modules/
 /.idea/

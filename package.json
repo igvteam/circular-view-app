@@ -1,13 +1,13 @@
 {
   "name": "igv-jbrowse-circularview",
   "version": "0.1.0",
-  "description": "Electron wrapper of jBrowse circular view",
+  "description": "IGV electron wrapper of jBrowse circular view",
   "main": "src/main/main.js",
   "scripts": {
-    "postinstall": "cp node_modules/circular-view/dist/circular-view.js src/renderer/.; electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "build": "electron-builder --macos --linux --windows"
+    "build": "cp node_modules/circular-view/dist/circular-view.js src/renderer/.; electron-builder --macos --linux --windows"
   },
   "repository": "https://github.com/igvteam/circ-app",
   "keywords": [
@@ -20,9 +20,11 @@
     "new-github-issue-url": "^1.0.0"
   },
   "devDependencies": {
+    "circular-view": "github:igvteam/circular-view",
+    "dotenv": "^9.0.2",
     "electron": "^16.0.6",
     "electron-builder": "^22.14.5",
-    "circular-view": "github:igvteam/circular-view",
+    "electron-notarize": "^1.1.1",
     "install": "^0.13.0"
   },
   "build": {
@@ -30,6 +32,14 @@
     "productName": "IGV JBrowse CircularView",
     "directories": {
       "buildResources": "resources"
+    },
+    "afterSign": "scripts/notarize.js",
+    "mac": {
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "icon": "build/icon.icns"
     },
     "dmg": {
       "sign": false,
