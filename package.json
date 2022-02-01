@@ -33,7 +33,7 @@
     "directories": {
       "buildResources": "resources"
     },
-    "afterSign": "scripts/notarize.js",
+    "afterSign": "scripts/afterSign.js",
     "mac": {
       "hardenedRuntime": true,
       "gatekeeperAssess": false,

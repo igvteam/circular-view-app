@@ -1,20 +1,26 @@
-const {notarize} = require('electron-notarize')
+const afterSign = require("./afterSign.js")
+const path = require('path');
 
-exports.default = async function notarizing(context) {
-    const {electronPlatformName, appOutDir} = context
-    if (electronPlatformName !== 'darwin') {
-        return
+//packager.appInfo.productFilename
+async function doNotarization() {
+
+    const context = {
+        electronPlatformName: "darwin",
+        appOutDir: path.resolve("../dist/mac"),
+        packager: {
+            appInfo: {
+                productFilename: "IGV JBrowse CircularView"
+            }
+        }
     }
 
-    const appName = context.packager.appInfo.productFilename
-
-    console.log(`appName = ${appName}`)
-
-    // return await notarize({
-    //     appBundleId: 'igv.org.circview',
-    //     appPath: `../dist/mac/${appName}`,
-    //     appleId: process.env.APPLEID,
-    //     appleIdPassword: process.env.APPLEIDPASS,
-    // })
-
+    await afterSign(context)
 }
+
+doNotarization()
+    .then((value) => {
+        console.log(value)
+    })
+    .catch((error) => {
+        console.log(error)
+    })
