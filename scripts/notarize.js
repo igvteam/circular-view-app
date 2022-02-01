@@ -1,4 +1,3 @@
-require('dotenv').config()
 const {notarize} = require('electron-notarize')
 
 exports.default = async function notarizing(context) {
@@ -13,7 +12,7 @@ exports.default = async function notarizing(context) {
 
     // return await notarize({
     //     appBundleId: 'igv.org.circview',
-    //     appPath: `dist/mac/${appName}`,
+    //     appPath: `../dist/mac/${appName}`,
     //     appleId: process.env.APPLEID,
     //     appleIdPassword: process.env.APPLEIDPASS,
     // })
