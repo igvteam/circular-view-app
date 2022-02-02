@@ -21,8 +21,8 @@ module.exports = async function afterSign(params) {
 
 
     if(!appleId || !appleIdPassword) {
-       // console.error("Must set APPLE_ID and APPLE_PASSWORD in file named '.env' in root of repository.  Skipping notarization")
-       // return;
+        console.log("Must set APPLE_ID and APPLE_PASSWORD in file named '.env' in root of repository.  Skipping notarization")
+        return;
     }
 
     console.log(`Notarizing appName: ${appName} appPath: ${appPath}`)

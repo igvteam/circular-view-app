@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "IGV electron wrapper of jBrowse circular view",
   "main": "src/main/main.js",
+  "email": "igv-team@broadinstitute.org",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "electron .",
@@ -40,6 +41,13 @@
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
       "icon": "build/icon.icns"
+    },
+    "win": {
+      "icon": "build/circular-view-logo-512.png"
+    },
+    "linux": {
+      "target": ["AppImage", "rpm", "deb"],
+      "maintainer": "Jim Robinson"
     },
     "dmg": {
       "sign": false,
