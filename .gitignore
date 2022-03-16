@@ -7,3 +7,4 @@ node_modules
 /upload.sh
 /src/renderer/circular-view.js
 /.env
+.DS_Store
