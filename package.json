@@ -1,6 +1,6 @@
 {
   "name": "igv-jbrowse-circularview",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "IGV electron wrapper of jBrowse circular view",
   "main": "src/main/main.js",
   "email": "igv-team@broadinstitute.org",
