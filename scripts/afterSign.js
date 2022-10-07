@@ -31,6 +31,7 @@ module.exports = async function afterSign(params) {
 
     try {
         await notarize({
+            tool: "notarytool",
             appBundleId: appId,
             appPath: appPath,
             appleId: appleId,
