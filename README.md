@@ -32,4 +32,9 @@ npm run build
 Build artifacts will be deposited in a "dist" folder.   The build itself is configured in ```package.json```.  See
 the [electron-builder](https://www.electron.build/) documentation for configuration options.
 
-
+The build includes signing and notarizing the Apple app. This requires a .env file at the root of the project directory to define an Apple developer id, an Apple team id, and an app-specific Apple password:
+```
+APPLE_ID=""
+APPLE_TEAM_ID=""
+APPLE_ID_PASSWORD=""
+```
