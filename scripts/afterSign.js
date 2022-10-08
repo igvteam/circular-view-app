@@ -18,7 +18,7 @@ module.exports = async function afterSign(params) {
     }
     const appleId = process.env.APPLE_ID
     const appleIdPassword = process.env.APPLE_ID_PASSWORD
-
+    const appleTeamId = process.env.APPLE_TEAM_ID
 
     if(!appleId || !appleIdPassword) {
         console.log("Must set APPLE_ID and APPLE_PASSWORD in file named '.env' in root of repository.  Skipping notarization")
@@ -36,6 +36,7 @@ module.exports = async function afterSign(params) {
             appPath: appPath,
             appleId: appleId,
             appleIdPassword: appleIdPassword,
+            teamId: appleTeamId
         });
     } catch (error) {
         console.error(error);
